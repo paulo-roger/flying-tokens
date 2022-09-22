@@ -1,20 +1,24 @@
 {
-  "id": "module",
-  "title": "New Module",
+  "name": "flying-tokens",
+  "id": "flying-tokens",
+  "title": "Flying Tokens",
   "description": "",
   "version": "This is auto replaced",
   "library": "false",
   "manifestPlusVersion": "1.2.0",
+  "minimumCoreVersion": "9",
+  "compatibleCoreVersion": "10",
   "compatibility": {
-    "minimum": 10,
-    "verified": 10,
-    "maximum": 11
+    "minimum": "9",
+    "verified": "10",
+    "maximum": "10"
   },
   "authors": [
     {
-      "name": "The League of Extraordinary FVTT Developers",
-      "url": "https://github.com/League-of-Foundry-Developers",
-      "discord": "discordID#0001"
+      "name": "winterwulf",
+      "url": "https://github.com/paulo-roger/",
+      "discord": "winterwulf#3118",
+      "ko-fi": "winterwulf"
     }
   ],
   "relationships": {
@@ -22,13 +26,13 @@
     "requires": []
   },
   "esmodules": [
-    "scripts/module.js"
+    "scripts/flying-tokens.js"
   ],
   "scripts": [
     "scripts/lib/lib.js"
   ],
   "styles": [
-    "styles/module.css"
+    "styles/flying-tokens.css"
   ],
   "languages": [
     {
@@ -40,12 +44,13 @@
   "url": "This is auto replaced",
   "manifest": "This is auto replaced",
   "download": "This is auto replaced",
-  "license": "LICENSE",
-  "readme": "README.md",
+  "license": "https://github.com/paulo-roger/flying-tokens/blob/master/LICENSE",
+  "readme": "https://github.com/paulo-roger/flying-tokens/blob/master/README.md",
+  "bugs": "https://github.com/paulo-roger/flying-tokens/issues",
   "media": [
     {
       "type": "icon",
-      "url": "https://avatars2.githubusercontent.com/u/71292812?s=400&u=ccdb4eeb7abf551ca8f314e5a9bfd0479a4d3d41&v=4"
+      "url": "https://odragaover.de/wp-content/uploads/ultimatemember/4/profile_photo-80x80.png?1663459606"
     }
   ]
 }

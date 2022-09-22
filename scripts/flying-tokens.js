@@ -19,7 +19,7 @@ Hooks.once('ready', async function () {
     console.log(" ==================================== FoundryVTT Version:", fvttVersion, " ==================================== ")
     //compatibility with v9
     if (fvttVersion < 10) {
-        particleWeather = 'fxmaster.updateWeather'
+        
     }
 });
 

@@ -3,15 +3,14 @@
   "id": "flying-tokens",
   "title": "Flying Tokens",
   "description": "",
-  "version": "This is auto replaced",
+  "version": "1.0.0",
   "library": "false",
   "manifestPlusVersion": "1.2.0",
   "minimumCoreVersion": "9",
   "compatibleCoreVersion": "10",
   "compatibility": {
     "minimum": "9",
-    "verified": "10",
-    "maximum": "10"
+    "verified": "10"
   },
   "authors": [
     {
@@ -50,7 +49,11 @@
   "media": [
     {
       "type": "icon",
-      "url": "https://odragaover.de/wp-content/uploads/ultimatemember/4/profile_photo-80x80.png?1663459606"
+      "url": "https://raw.githubusercontent.com/paulo-roger/weatherfx/master/readme/icon.png"
+    },
+    {
+      "type": "cover",
+      "url": "https://raw.githubusercontent.com/paulo-roger/weatherfx/master/readme/cover.png"
     }
   ]
 }

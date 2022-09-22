@@ -19,7 +19,7 @@ Hooks.once('ready', async function () {
     console.log(" ==================================== FoundryVTT Version:", fvttVersion, " ==================================== ")
     //compatibility with v9
     if (fvttVersion < 10) {
-        
+
     }
 });
 
@@ -51,7 +51,11 @@ export function isFlyer(token) {
 }
 
 async function fly(token, elevation) {
-    let scale = token.texture.scaleX;
+    let scale
+    if (fvttVersion >= 10)
+        scale = token.texture.scaleX;
+    if (fvttVersion < 10)
+        scale = token.data.scale
     let isFlying = token.getFlag(MODULE, "flying")
     if (!isFlying) await token.setFlag(MODULE, "scale", scale);
     if (elevation == 0) {

@@ -31,6 +31,7 @@ export class FlyingHud {
         const button = this.buildButton(html, `Enable flight`);
         button.find('i').on("click", async (ev) => {
             await token.document.setFlag(MODULE, "enableFlight", true)
+            canvas.hud.token.render();
         });
     }
     static async addDisableButton(html, hudData) {
@@ -41,6 +42,7 @@ export class FlyingHud {
         button.find('i').on("click", async (ev) => {
             land(token.document)
             await token.document.setFlag(MODULE, "enableFlight", false)
+            canvas.hud.token.render();
         });
     }
 

@@ -14,10 +14,10 @@ When you change the elevation to 0 the token will land.
 
 If you opt to disable the automatic effect and prefer to enable per token you just have to disable **Automatic Apply** in the settings and now all tokens with flying speed movement will have a dove icon in the token HUD, if you click on it, it activates ***Flying Tokens*** for that specific token and then when you change its elevation the effects will apply.
 
-#### First click the dove icon to activate *Flying Tokens* for that token and then set a new elevation
+***First click the dove icon to activate *Flying Tokens* for that token and then set a new elevation***
 ![functions1](readme/functions1.png)
 
-#### If you want to disable just click the dove slashed icon and it will remove the filter effects, then you can change the elevation and it won't apply effects anymore.
+***If you want to land your token just click the dove slashed icon and it will remove the filter effects, this wont change token elevation, as for example the token could land in a higher level. Then you can change the elevation and it won't apply effects anymore.***
 ![functions2](readme/functions2.png)
 
 ### Effects included
@@ -26,11 +26,27 @@ Shadow projection, token scale up or down depending on the altitude, small movem
 ## Settings
 **Automatic Apply**  
 *Default: active.*  
-This setting if checked will apply ***Flying Tokens*** effects to all tokens that have flying speed movement and you change its elevation.
+This setting if checked will apply ***Flying Tokens*** effects to all tokens that have *flying speed movement* and you change its elevation.
+
+**Al Tokens Can Fly**  
+*Default: disabled.*  
+Apply ***Flying Tokens*** effects to all tokens independent of *flying speed movement* and you change its elevation.
 
 **Output to chat**  
 *Default: active.*  
 Display a chat message with the token name and its new elevation.
+
+**Notifications**  
+*Default: disabled.*  
+Display a notification with the token name and its new elevation.
+
+**Scale Token Based On Elevation**  
+*Default: active.*  
+increase token scale based on how high is its elevation.
+
+**Auto Zoom**  
+*Default: disabled.*  
+Zoom into the token when it lands, and out based on how high it is flying.
 
 ![settings](readme/settings.png)
 

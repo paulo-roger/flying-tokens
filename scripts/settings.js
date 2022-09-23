@@ -35,7 +35,7 @@ export function registerSettings() {
     });
 
     game.settings.register(MODULE, 'scaleFT', {
-        name: 'Scale Token Based On Height',
+        name: 'Scale Token Based On Elevation',
         hint: `Change the token scale to be larger as it goes higher in elevation`,
         scope: 'world',
         config: true,

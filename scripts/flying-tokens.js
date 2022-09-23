@@ -1,6 +1,6 @@
 import { MODULE, MODULE_DIR } from "./const.js"; //import the const variables
 import { chatMessage } from "./util.js"
-import { registerSettings, cacheSettings, enableFT, chatOutput } from "./settings.js" //import settings
+import { registerSettings, cacheSettings, enableFT, scaleFT, chatOutput } from "./settings.js" //import settings
 import { FlyingHud } from "./flying-hud.js"
 
 //Compatibility with v9
@@ -60,6 +60,8 @@ async function fly(token, elevation) {
     if (!isFlying) await token.setFlag(MODULE, "scale", scale);
     if (elevation == 0) {
         return land(token)
+    } else if (elevation < 0) {
+        return;
     } else {
         await token.setFlag(MODULE, "flying", true)
         await flyZoom(token, elevation)
@@ -85,11 +87,15 @@ async function tokenScale(token, elevation) {
 }
 
 async function flyZoom(token, elevation, minZoom = 3) {
-    let scale = await tokenScale(token, elevation)
-    let zoom = Math.min(3 / (Math.max(scale / 1.5, 1)), minZoom)
     let x = token.x + game.scenes.viewed.data.size
     let y = token.y + game.scenes.viewed.data.size
-    canvas.animatePan({ x: x, y: y, scale: zoom })
+    if (scaleFT) {
+        let scale = await tokenScale(token, elevation)
+        let zoom = Math.min(3 / (Math.max(scale / 1.5, 1)), minZoom)
+        canvas.animatePan({ x: x, y: y, scale: zoom })
+    } else {
+        canvas.animatePan({ x: x, y: y })
+    }
 }
 
 async function flyingFX(token, elevation) {

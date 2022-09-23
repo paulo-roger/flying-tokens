@@ -1,6 +1,4 @@
 # Changelog
-## [1.0.0]
-- Intial release
 
 ## [1.1.1]
 **Bugs**
@@ -13,3 +11,6 @@
   -  disable auto zoom, 
   -  enable *Flying Tokens* for all tokens 
   -  and disable scale
+
+## [1.0.0]
+- Intial release

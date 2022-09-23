@@ -60,20 +60,7 @@ So far none.
 If you have suggestions or want to report a problem, you can create an issue here: [Issues](../../issues)
 
 ## Changelog
-### 1.0.0
-- Intial release
-
-### 1.1.1
-**Bugs**
-- Fixed bug when setting negative elevation values (Thank you Roi!)
-- Hud button re-activates flying for the current elevation
-
-**Features**
-- More settings: 
-  - You can disable game notifications,
-  -  disable auto zoom, 
-  -  enable *Flying Tokens* Tokens for all tokens 
-  -  and disable scale
+You can read the changelog here: [CHANGELOG.md](https://github.com/paulo-roger/flying-tokens/blob/master/CHANGELOG.md)
 
 ## Special Thanks
 `Peterson`, `roi007leaf` and ``Zhell``

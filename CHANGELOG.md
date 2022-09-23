@@ -11,5 +11,5 @@
 - More settings: 
   - You can disable game notifications,
   -  disable auto zoom, 
-  -  enable Fly Tokens for all tokens 
+  -  enable *Flying Tokens* for all tokens 
   -  and disable scale

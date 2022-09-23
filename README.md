@@ -56,7 +56,7 @@ If you have suggestions or want to report a problem, you can create an issue her
 - More settings: 
   - You can disable game notifications,
   -  disable auto zoom, 
-  -  enable Fly Tokens for all tokens 
+  -  enable *Flying Tokens* Tokens for all tokens 
   -  and disable scale
 
 ## Special Thanks

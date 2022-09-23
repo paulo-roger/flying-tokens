@@ -1,6 +1,6 @@
 import { MODULE, MODULE_DIR } from "./const.js"; //import the const variables
 // import { getCanvas } from "./util.js";
-import { isFlyer, land } from "./flying-tokens.js";
+import { isFlyer, land, fly } from "./flying-tokens.js";
 
 /**
  * Functinality class for managing the token HUD
@@ -18,12 +18,12 @@ export class FlyingHud {
         let token = canvas.tokens.get(hudData._id)
         let enableFlight = token.document.getFlag(MODULE, "enableFlight")
         if (isFlyer(token)) {
-            if (enableFlight){
+            if (enableFlight) {
                 this.addDisableButton(html, hudData)
             } else {
                 this.addEnableButton(html, hudData);
             }
-        }        
+        }
     }
     static async addEnableButton(html, hudData) {
         // let token = canvas.tokens.controlled.filter(token => token.id == hudData._id).map(token => { return token; });
@@ -31,6 +31,7 @@ export class FlyingHud {
         const button = this.buildButton(html, `Enable flight`);
         button.find('i').on("click", async (ev) => {
             await token.document.setFlag(MODULE, "enableFlight", true)
+            await fly(token.document, token.document.elevation)
             canvas.hud.token.render();
         });
     }

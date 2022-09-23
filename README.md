@@ -25,11 +25,11 @@ Shadow projection, token scale up or down depending on the altitude, small movem
 
 ## Settings
 **Automatic Apply**
-*Default: active.*
+*Default: active.*  
 This setting if checked will apply ***Flying Tokens*** effects to all tokens that have flying speed movement and you change its elevation.
 
 **Output to chat**
-*Default: active.*
+*Default: active.*  
 Display a chat message with the token name and its new elevation.
 
 ![settings](readme/settings.png)

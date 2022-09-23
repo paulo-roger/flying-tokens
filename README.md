@@ -20,6 +20,9 @@ If you opt to disable the automatic effect and prefer to enable per token you ju
 #### If you want to disable just click the dove slashed icon and it will remove the filter effects, then you can change the elevation and it won't apply effects anymore.
 ![functions2](readme/functions2.png)
 
+### Effects included
+Shadow projection, token scale up or down depending on the altitude, small movements to simulate flight, Token Magic FX filter to simulate wind. In the next release it will be configurable.
+
 ## Settings
 **Automatic Apply**
 *Default: active.*

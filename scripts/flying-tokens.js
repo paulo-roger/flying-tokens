@@ -50,7 +50,7 @@ export function isFlyer(token) {
     else return true;
 }
 
-async function fly(token, elevation) {
+export async function fly(token, elevation) {
     let scale
     if (fvttVersion >= 10)
         scale = token.texture.scaleX;

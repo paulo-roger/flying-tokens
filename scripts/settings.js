@@ -1,6 +1,7 @@
 import { MODULE } from "./const.js"
 
 export let enableFT = true;
+export let scaleFT = false;
 export let chatOutput = true;
 export let enableSound = false;
 export let flightSound = 'modules/michaelghelfi/ambience/Snowing.ogg';
@@ -27,6 +28,19 @@ export function registerSettings() {
         config: true,
         type: Boolean,
         default: true,
+        restricted: true,
+        onChange: () => {
+            cacheSettings();
+        },
+    });
+
+    game.settings.register(MODULE, 'scaleFT', {
+        name: 'Scale Token Based On Height',
+        hint: `Change the token scale to be larger as it goes higher in elevation`,
+        scope: 'world',
+        config: true,
+        type: Boolean,
+        default: false,
         restricted: true,
         onChange: () => {
             cacheSettings();
@@ -78,6 +92,7 @@ export function registerSettings() {
 // function that get the settings options and assign to the variables
 export function cacheSettings() {
     enableFT = game.settings.get(MODULE, 'enableFT');
+    scaleFT = game.settings.get(MODULE, 'scaleFT');
     chatOutput = game.settings.get(MODULE, 'chatOutput');
     enableSound = game.settings.get(MODULE, 'enableSound');
     flightSound = game.settings.get(MODULE, 'flightSound');

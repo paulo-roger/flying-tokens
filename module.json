@@ -3,7 +3,7 @@
   "id": "flying-tokens",
   "title": "Flying Tokens",
   "description": "",
-  "version": "1.0.0",
+  "version": "This is auto replaced",
   "library": "false",
   "manifestPlusVersion": "1.2.0",
   "minimumCoreVersion": "9",
@@ -17,12 +17,19 @@
       "name": "winterwulf",
       "url": "https://github.com/paulo-roger/",
       "discord": "winterwulf#3118",
-      "ko-fi": "winterwulf"
+      "ko-fi": "winterwulf",
+      "twitter": "@vvinterwulf"
     }
   ],
   "relationships": {
     "systems": [],
-    "requires": []
+    "requires": [
+      {
+        "id": "tokenmagic",
+        "type": "module",
+        "compatibility": {}
+      }
+    ]
   },
   "esmodules": [
     "scripts/flying-tokens.js"

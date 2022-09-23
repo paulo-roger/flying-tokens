@@ -24,11 +24,11 @@ If you opt to disable the automatic effect and prefer to enable per token you ju
 Shadow projection, token scale up or down depending on the altitude, small movements to simulate flight, Token Magic FX filter to simulate wind. In the next release it will be configurable.
 
 ## Settings
-**Automatic Apply**
+**Automatic Apply**  
 *Default: active.*  
 This setting if checked will apply ***Flying Tokens*** effects to all tokens that have flying speed movement and you change its elevation.
 
-**Output to chat**
+**Output to chat**  
 *Default: active.*  
 Display a chat message with the token name and its new elevation.
 

@@ -60,6 +60,8 @@ async function fly(token, elevation) {
     if (!isFlying) await token.setFlag(MODULE, "scale", scale);
     if (elevation == 0) {
         return land(token)
+    } else if (elevation < 0) {
+        return;
     } else {
         await token.setFlag(MODULE, "flying", true)
         await flyZoom(token, elevation)

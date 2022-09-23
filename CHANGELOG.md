@@ -6,6 +6,7 @@
 **Bugs**
 - Fixed bug when setting negative elevation values (Thank you Roi!)
 - Hud button re-activates flying for the current elevation
+  
 **Features**
 - More settings: 
   - You can disable game notifications,

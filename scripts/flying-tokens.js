@@ -1,6 +1,6 @@
 import { MODULE, MODULE_DIR } from "./const.js"; //import the const variables
 import { chatMessage } from "./util.js"
-import { registerSettings, cacheSettings, enableFT, scaleFT, chatOutput } from "./settings.js" //import settings
+import { registerSettings, cacheSettings, enableFT, enableForAll, scaleFT, enableZoom, chatOutput, notificationOutput } from "./settings.js" //import settings
 import { FlyingHud } from "./flying-hud.js"
 
 //Compatibility with v9
@@ -40,6 +40,7 @@ Hooks.on('renderTokenHUD', (app, html, data) => {
 });
 
 export function isFlyer(token) {
+    if (enableForAll) return true;
     let tokenFly = token.actor.data.data.attributes.movement.fly
     if (tokenFly <= 0 || tokenFly == null) {
         let errorMessage = "This creature can't fly."
@@ -66,7 +67,8 @@ export async function fly(token, elevation) {
         await token.setFlag(MODULE, "flying", true)
         await flyZoom(token, elevation)
         await flyingFX(token, elevation)
-        ui.notifications.info(token.actor.name + ' is flying at <b>' + elevation + ' feet</b> high.')
+        if (notificationOutput)
+            ui.notifications.info(token.actor.name + ' is flying at <b>' + elevation + ' feet</b> high.')
         if (chatOutput)
             await chatMessage(`<img src='${token.actor.img}' width='32' style='border:none'> ${token.actor.name} is flying at <b>${elevation} feet</b> high.`)
     }
@@ -87,14 +89,14 @@ async function tokenScale(token, elevation) {
 }
 
 async function flyZoom(token, elevation, minZoom = 3) {
-    let x = token.x + game.scenes.viewed.data.size
-    let y = token.y + game.scenes.viewed.data.size
     if (scaleFT) {
         let scale = await tokenScale(token, elevation)
-        let zoom = Math.min(3 / (Math.max(scale / 1.5, 1)), minZoom)
-        canvas.animatePan({ x: x, y: y, scale: zoom })
-    } else {
-        canvas.animatePan({ x: x, y: y })
+        if (enableZoom) {
+            let x = token.x + game.scenes.viewed.data.size
+            let y = token.y + game.scenes.viewed.data.size
+            let zoom = Math.min(3 / (Math.max(scale / 1.5, 1)), minZoom)
+            await canvas.animatePan({ x: x, y: y, scale: zoom })
+        }
     }
 }
 
@@ -204,7 +206,8 @@ export async function land(token) {
     await token.update({ scale: scale })
     await flyingFX(token, 0);
     await flyZoom(token, 0, 2.5);
-    ui.notifications.info(token.actor.name + ' <b> has landed</b>.')
+    if (notificationOutput)
+        ui.notifications.info(token.actor.name + ' <b> has landed</b>.')
     if (chatOutput)
         await chatMessage(`<img src='${token.actor.img}' width='32' style='border:none'> ${token.actor.name}  <b> has landed</b>.`)
 }

@@ -1,11 +1,12 @@
 import { MODULE } from "./const.js"
 
 export let enableFT = true;
-export let scaleFT = false;
+export let enableForAll = false;
 export let chatOutput = true;
-export let enableSound = false;
-export let flightSound = 'modules/michaelghelfi/ambience/Snowing.ogg';
-export let landingSound = 'modules/ivan-duch-music-packs/audio/rain-sfx.ogg';
+export let notificationOutput = false;
+export let scaleFT = true;
+export let enableZoom = false;
+
 
 export function registerSettings() {
     game.settings.register(MODULE, 'enableFT', {
@@ -21,13 +22,39 @@ export function registerSettings() {
         },
     });
 
+    game.settings.register(MODULE, 'enableForAll', {
+        name: 'All Tokens Can Fly',
+        hint: `Any token can fly, enable this if you want to make any token be able to fly.`,
+        scope: 'world',
+        config: true,
+        type: Boolean,
+        default: false,
+        restricted: true,
+        onChange: () => {
+            cacheSettings();
+        },
+    });
+
     game.settings.register(MODULE, 'chatOutput', {
-        name: 'Output to chat',
+        name: 'Output To Chat',
         hint: `Display Flying Tokens messages in the game chat.`,
         scope: 'world',
         config: true,
         type: Boolean,
         default: true,
+        restricted: true,
+        onChange: () => {
+            cacheSettings();
+        },
+    });
+
+    game.settings.register(MODULE, 'notificationOutput', {
+        name: 'Notifications',
+        hint: `Display Flying Tokens notifications.`,
+        scope: 'world',
+        config: true,
+        type: Boolean,
+        default: false,
         restricted: true,
         onChange: () => {
             cacheSettings();
@@ -40,48 +67,20 @@ export function registerSettings() {
         scope: 'world',
         config: true,
         type: Boolean,
-        default: false,
+        default: true,
         restricted: true,
         onChange: () => {
             cacheSettings();
         },
     });
 
-    game.settings.register(MODULE, 'enableSound', {
-        name: 'Enable sound',
-        hint: `Play sound effects along with the visual weather effects (The default are sounds from the modules: Ivan Duch's Music Packs and Michael Ghelfi Studios Audio Pack, so you would need to install these modules as well or set your own custom sounds).`,
+    game.settings.register(MODULE, 'enableZoom', {
+        name: 'Auto Zoom',
+        hint: `Change the zoom level based on the token scale, will only have effect if 'Scale Token Base On Elevation' is enabled.`,
         scope: 'world',
-        config: false,
+        config: true,
         type: Boolean,
         default: false,
-        restricted: true,
-        onChange: () => {
-            cacheSettings();
-        },
-    });
-
-    game.settings.register(MODULE, 'flightSound', {
-        name: 'Custom sounds effects: Blizzard',
-        hint: 'Let you change the sounds effects for whatever you prefer.',
-        scope: 'world',
-        config: false,
-        type: String,
-        filePicker: 'audio',
-        default: 'modules/michaelghelfi/ambience/Snowing.ogg',
-        restricted: true,
-        onChange: () => {
-            cacheSettings();
-        },
-    });
-
-    game.settings.register(MODULE, 'landingSound', {
-        name: 'Custom sounds effects: Rain',
-        hint: 'Let you change the sounds effects for whatever you prefer.',
-        scope: 'world',
-        config: false,
-        type: String,
-        filePicker: 'audio',
-        default: 'modules/ivan-duch-music-packs/audio/rain-sfx.ogg',
         restricted: true,
         onChange: () => {
             cacheSettings();
@@ -92,9 +91,10 @@ export function registerSettings() {
 // function that get the settings options and assign to the variables
 export function cacheSettings() {
     enableFT = game.settings.get(MODULE, 'enableFT');
-    scaleFT = game.settings.get(MODULE, 'scaleFT');
+    enableForAll = game.settings.get(MODULE, 'enableForAll');
     chatOutput = game.settings.get(MODULE, 'chatOutput');
-    enableSound = game.settings.get(MODULE, 'enableSound');
-    flightSound = game.settings.get(MODULE, 'flightSound');
-    landingSound = game.settings.get(MODULE, 'landingSound');
+    notificationOutput = game.settings.get(MODULE, 'notificationOutput');
+    scaleFT = game.settings.get(MODULE, 'scaleFT');
+    enableZoom = game.settings.get(MODULE, 'enableZoom');
+
 }

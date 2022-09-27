@@ -5,7 +5,7 @@
 # Flying Tokens
 
 Ever wanted your tokens to fly? I mean really look like they're flying, when they are supposed to, well you should try Flying Tokens.
-Flying Tokens works with Token Magic FX API to add shadow and movement that simulates the flight.
+Flying Tokens works with [Token Magic FX](https://foundryvtt.com/packages/tokenmagic) API to add shadow and movement that simulates the flight.
 
 ## Functions
 

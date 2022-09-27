@@ -5,7 +5,7 @@
   "description": "Flying Tokens works with Token Magic FX API to add shadow and movement that simulates the flight.",
   "version": "This is auto replaced",
   "library": "false",
-  "manifestPlusVersion": "1.2.0",
+  "manifestPlusVersion": "This is auto replaced",
   "minimumCoreVersion": "9",
   "compatibleCoreVersion": "10",
   "compatibility": {
@@ -56,11 +56,11 @@
   "media": [
     {
       "type": "icon",
-      "url": "https://raw.githubusercontent.com/paulo-roger/weatherfx/master/readme/icon.png"
+      "url": "https://raw.githubusercontent.com/paulo-roger/flying-tokens/master/readme/icon.png"
     },
     {
       "type": "cover",
-      "url": "https://raw.githubusercontent.com/paulo-roger/weatherfx/master/readme/cover.png"
+      "url": "https://raw.githubusercontent.com/paulo-roger/flying-tokens/master/readme/cover.png"
     }
   ]
 }

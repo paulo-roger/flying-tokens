@@ -6,7 +6,9 @@ export let chatOutput = true;
 export let notificationOutput = false;
 export let scaleFT = true;
 export let enableZoom = false;
-
+export let optMovement = true;
+export let optNoShadow = true;
+export let optWind = true;
 
 export function registerSettings() {
     game.settings.register(MODULE, 'enableFT', {
@@ -86,6 +88,45 @@ export function registerSettings() {
             cacheSettings();
         },
     });
+
+    game.settings.register(MODULE, 'optMovement', {
+        name: 'Enable Movement Effect.',
+        hint: `This setting will only affect tokens flying after the change, to apply to a token already flying you must land and fly again.`,
+        scope: 'world',
+        config: true,
+        type: Boolean,
+        default: true,
+        restricted: true,
+        onChange: () => {
+            cacheSettings();
+        },
+    });
+
+    game.settings.register(MODULE, 'optNoShadow', {
+        name: 'Enable Shadow remove',
+        hint: `Flying Tokens auto remove the shadow drawing from the token, uncheck this option if you want to disable this behavior. This setting will only affect tokens flying after the change, to apply to a token already flying you must land and fly again.`,
+        scope: 'world',
+        config: true,
+        type: Boolean,
+        default: true,
+        restricted: true,
+        onChange: () => {
+            cacheSettings();
+        },
+    });
+
+    game.settings.register(MODULE, 'optWind', {
+        name: 'Enable wind effect',
+        hint: `Uncheck this to remove the small twist effect from the center of the token while it is flying. This setting will only affect tokens flying after the change, to apply to a token already flying you must land and fly again.`,
+        scope: 'world',
+        config: true,
+        type: Boolean,
+        default: true,
+        restricted: true,
+        onChange: () => {
+            cacheSettings();
+        },
+    });
 }
 
 // function that get the settings options and assign to the variables
@@ -96,5 +137,7 @@ export function cacheSettings() {
     notificationOutput = game.settings.get(MODULE, 'notificationOutput');
     scaleFT = game.settings.get(MODULE, 'scaleFT');
     enableZoom = game.settings.get(MODULE, 'enableZoom');
-
+    optMovement = game.settings.get(MODULE, 'optMovement');
+    optNoShadow = game.settings.get(MODULE, 'optNoShadow');
+    optWind = game.settings.get(MODULE, 'optWind');
 }

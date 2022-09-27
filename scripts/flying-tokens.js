@@ -1,7 +1,8 @@
 import { MODULE, MODULE_DIR } from "./const.js"; //import the const variables
 import { chatMessage } from "./util.js"
-import { registerSettings, cacheSettings, enableFT, enableForAll, scaleFT, enableZoom, chatOutput, notificationOutput } from "./settings.js" //import settings
+import { registerSettings, cacheSettings, enableFT, enableForAll, scaleFT, enableZoom, chatOutput, notificationOutput, optMovement, optNoShadow, optWind } from "./settings.js" //import settings
 import { FlyingHud } from "./flying-hud.js"
+// import { movement, noShadow, wind, shadow, bounce } from "./filters.js"
 
 //Compatibility with v9
 let fvttVersion
@@ -18,9 +19,9 @@ Hooks.once('ready', async function () {
     console.log(" ====================================== 🐦 Flying Tokens  ======================================= ")
     console.log(" ==================================== FoundryVTT Version:", fvttVersion, " ==================================== ")
     //compatibility with v9
-    if (fvttVersion < 10) {
+    // if (fvttVersion < 10) {
 
-    }
+    // }
 });
 
 Hooks.on("preUpdateToken", async (token, updateData) => {
@@ -75,12 +76,12 @@ export async function fly(token, elevation) {
 }
 
 async function tokenScale(token, elevation) {
+    let originalScale = token.getFlag(MODULE, "scale");
     if (elevation == 0) {
-        let originalScale = token.getFlag(MODULE, "scale");
         await token.update({ scale: originalScale })
         return 0
     }
-    let scale = Math.pow(elevation, 0.28)
+    let scale = originalScale + Math.pow(elevation, 0.28)
     scale = Math.round((scale + Number.EPSILON) * 100) / 100 //rounding with 2 floats
     if (scale <= 1) scale += 1
     else if (scale > 10) scale = 10
@@ -102,7 +103,7 @@ async function flyZoom(token, elevation, minZoom = 3) {
 
 async function flyingFX(token, elevation) {
     let canvasToken = canvas.tokens.get(token.id)
-    const flyingFXParams = [{
+    const movement = {
         filterType: "images",
         filterId: MODULE,
         time: 100,
@@ -120,12 +121,14 @@ async function flyingFX(token, elevation) {
                 animType: "move"
             }
         }
-    }, {
+    }
+    const noShadow = {
         filterType: "zapshadow",
         filterId: MODULE,
         alphaTolerance: 0.5,
         rank: 2
-    }, {
+    }
+    const wind = {
         filterType: "transform",
         filterId: MODULE,
         twRadiusPercent: 10,
@@ -135,19 +138,20 @@ async function flyingFX(token, elevation) {
             twRotation:
             {
                 animType: "sinOscillation",
-                val1: -(0.05 * elevation),
-                val2: +(0.05 * elevation),
+                val1: -(2 * Math.pow(elevation, 0.28)),
+                val2: +(2 * Math.pow(elevation, 0.28)),
                 loopDuration: 5000,
             }
         }
-    }, {
+    }
+    const shadow = {
         filterType: "shadow",
         filterId: MODULE,
         rotation: 35,
         blur: 2,
         quality: 5,
         distance: elevation / 0.7,
-        alpha: Math.min(1 / ((elevation) / 50), 0.8),
+        alpha: Math.min(1 / ((elevation) / 60), 0.8),
         padding: elevation * 2,
         shadowOnly: false,
         color: 0x000000,
@@ -168,10 +172,11 @@ async function flyingFX(token, elevation) {
                 loopDuration: 5000,
                 animType: "syncSinOscillation",
                 val1: 33,
-                val2: 33 + (elevation * 0.05)
+                val2: 33+(3 * Math.pow(elevation, 0.28))
             }
         }
-    }, {
+    }
+    const bounce = {
         filterType: "transform",
         filterId: MODULE,
         padding: 50,
@@ -192,12 +197,20 @@ async function flyingFX(token, elevation) {
                 loopDuration: 1400,
             }
         }
-    }]
+    }
+    let flyingFXParams = []
+
+    if (optNoShadow)
+        flyingFXParams.push(noShadow, shadow)
+    if (optWind)
+        flyingFXParams.push(wind)
+    if (optMovement)
+        flyingFXParams.push(bounce, movement)
+
     let isFlying = token.getFlag(MODULE, "flying")
     await canvasToken.TMFXdeleteFilters(MODULE)
-    if (isFlying) {
+    if (isFlying)
         await TokenMagic.addUpdateFilters(canvasToken, flyingFXParams);
-    }
 }
 
 export async function land(token) {

@@ -1,11 +1,13 @@
 import { MODULE, MODULE_DIR } from "./const.js"; //import the const variables
 import { chatMessage } from "./util.js"
-import { registerSettings, cacheSettings, enableFT, enableForAll, scaleFT, enableZoom, chatOutput, notificationOutput, optMovement, optNoShadow, optWind } from "./settings.js" //import settings
+import { registerSettings, cacheSettings, enableFT, enableForAll, scaleFT, enableZoom, chatOutput, notificationOutput, optMovement, optNoShadow, optWind, customScale } from "./settings.js" //import settings
 import { FlyingHud } from "./flying-hud.js"
 // import { movement, noShadow, wind, shadow, bounce } from "./filters.js"
 
 //Compatibility with v9
 let fvttVersion
+//Compatibility with PF2E
+let system
 
 // Hook that trigger once when the game is initiated. Register and cache settings.
 Hooks.once("init", () => {
@@ -16,13 +18,20 @@ Hooks.once("init", () => {
 
 Hooks.once('ready', async function () {
     fvttVersion = parseInt(game.version)
+    system = game.system.id
     console.log(" ====================================== 🐦 Flying Tokens  ======================================= ")
     console.log(" ==================================== FoundryVTT Version:", fvttVersion, " ==================================== ")
-    //compatibility with v9
-    // if (fvttVersion < 10) {
-
-    // }
+    pf2eAutoScaleCheck();
 });
+
+function pf2eAutoScaleCheck(token, perma = true) {
+    let check;
+    if (system == 'pf2e' && scaleFT) {
+        if (token) check = token.getFlag("pf2e", "linkToActorSize")
+        else check = game.settings.get('pf2e', 'tokens.autoscale')
+        if (check) ui.notifications.warn('If you want Flying Tokens to autoscale you must disable PF2E setting "<b>Scale tokens according to size</b>" or individually disable this in the token config.', {permanent:perma})
+    }
+}
 
 Hooks.on("preUpdateToken", async (token, updateData) => {
     // await token.setFlag(MODULE, "scale", token.texture.scaleX);
@@ -38,6 +47,39 @@ Hooks.on("preUpdateToken", async (token, updateData) => {
 Hooks.on('renderTokenHUD', (app, html, data) => {
     if (!enableFT)
         FlyingHud.renderHud(app, html, data);
+});
+
+Hooks.on("renderTokenConfig", (app, html, data) => {
+    if (isFlyer(app.token)) {
+        let altToken = app.token.getFlag(MODULE, "altToken") || "";
+        let newHtml = `<div class="form-group">
+                    <label>Flying Image Path</label>
+                    <div class="form-fields">
+                      <button type="button" class="file-picker" data-type="imagevideo" data-target="flags.${MODULE}.altToken" title="Browse Files" tabindex="-1">
+                        <i class="fas fa-file-import fa-fw"></i>
+                      </button>
+                      <input class="image" type="text" name="flags.${MODULE}.altToken" placeholder="path/image.png" value="${altToken}">
+                    </div>
+                  </div>`
+        const tinthtml = html.find('input[name="texture.src"]');
+        const formGroup = tinthtml.closest(".form-group");
+        formGroup.after(newHtml);
+        // altToken = html.find('input[name="flags.flyingTokens.alt"]').value;
+        app.setPosition({ height: "auto" });
+        html.find(`button[data-target="flags.${MODULE}.altToken"]`).on('click', async () => {
+            new FilePicker({
+                current: altToken,
+                type: "imagevideo",
+                displayMode: "tiles",
+                button: "file-picker",
+                callback: async (path) => {
+                    html.find(`input[name="flags.${MODULE}.altToken"]`).val(path);
+                    // console.log(app.token)
+                    // await app.token.setFlag(MODULE, "altToken", path)
+                }
+            }).render()
+        });
+    }
 });
 
 export function isFlyer(token) {
@@ -59,7 +101,10 @@ export async function fly(token, elevation) {
     if (fvttVersion < 10)
         scale = token.data.scale
     let isFlying = token.getFlag(MODULE, "flying")
-    if (!isFlying) await token.setFlag(MODULE, "scale", scale);
+    if (!isFlying) {
+        await token.setFlag(MODULE, "scale", scale);
+        await token.setFlag(MODULE, "originalToken", token.texture.src);
+    }
     if (elevation == 0) {
         return land(token)
     } else if (elevation < 0) {
@@ -69,23 +114,24 @@ export async function fly(token, elevation) {
         await flyZoom(token, elevation)
         await flyingFX(token, elevation)
         if (notificationOutput)
-            ui.notifications.info(token.actor.name + ' is flying at <b>' + elevation + ' feet</b> high.')
+            ui.notifications.info(token.name + ' is flying at <b>' + elevation + ' feet</b> high.')
         if (chatOutput)
-            await chatMessage(`<img src='${token.actor.img}' width='32' style='border:none'> ${token.actor.name} is flying at <b>${elevation} feet</b> high.`)
+            await chatMessage(`<img src='${token.texture.src}' width='32' style='border:none'> ${token.name} is flying at <b>${elevation} feet</b> high.`)
     }
 }
 
 async function tokenScale(token, elevation) {
+    pf2eAutoScaleCheck(token, false);
     let originalScale = token.getFlag(MODULE, "scale");
-    if (elevation == 0) {
-        await token.update({ scale: originalScale })
-        return 0
-    }
-    let scale = originalScale + Math.pow(elevation, 0.28)
+    let altToken = token.getFlag(MODULE, "altToken") || token.getFlag(MODULE, "originalToken");
+    if (elevation == 0) return 0
+    let scale = originalScale + customScale * elevation
     scale = Math.round((scale + Number.EPSILON) * 100) / 100 //rounding with 2 floats
-    if (scale <= 1) scale += 1
+    if (scale < 0.2) scale = 0.2
     else if (scale > 10) scale = 10
-    await token.update({ scale: scale })
+    await token.update({ texture: { src: altToken } })
+    await new Promise(resolve => setTimeout(resolve, 800));//give time to the scale animation to play
+    await token.update({ texture: { scaleX: scale, scaleY: scale } })//this is in a different line so the animation plays AFTER the token is changed.
     return scale
 }
 
@@ -172,7 +218,7 @@ async function flyingFX(token, elevation) {
                 loopDuration: 5000,
                 animType: "syncSinOscillation",
                 val1: 33,
-                val2: 33+(3 * Math.pow(elevation, 0.28))
+                val2: 33 + (3 * Math.pow(elevation, 0.28))
             }
         }
     }
@@ -215,12 +261,15 @@ async function flyingFX(token, elevation) {
 
 export async function land(token) {
     await token.setFlag(MODULE, "flying", false);
+    let originalToken = token.getFlag(MODULE, "originalToken");
     let scale = token.getFlag(MODULE, "scale");
-    await token.update({ scale: scale })
-    await flyingFX(token, 0);
+    await token.update({ texture: { scaleX: scale, scaleY: scale } })
     await flyZoom(token, 0, 2.5);
+    await new Promise(resolve => setTimeout(resolve, 800));//give time to the scale animation to play
+    await flyingFX(token, 0);
+    await token.update({ texture: { src: originalToken } }) //this is in a different line so the animation plays BEFORE the token is changed.
     if (notificationOutput)
-        ui.notifications.info(token.actor.name + ' <b> has landed</b>.')
+        ui.notifications.info(token.name + ' <b> has landed</b>.')
     if (chatOutput)
-        await chatMessage(`<img src='${token.actor.img}' width='32' style='border:none'> ${token.actor.name}  <b> has landed</b>.`)
+        await chatMessage(`<img src='${token.texture.src}' width='32' style='border:none'> ${token.name}  <b> has landed</b>.`)
 }

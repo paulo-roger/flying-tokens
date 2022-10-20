@@ -9,6 +9,7 @@ export let enableZoom = false;
 export let optMovement = true;
 export let optNoShadow = true;
 export let optWind = true;
+export let customScale = null;
 
 export function registerSettings() {
     game.settings.register(MODULE, 'enableFT', {
@@ -76,6 +77,24 @@ export function registerSettings() {
         },
     });
 
+    game.settings.register(MODULE, 'customScale', {
+        name: 'Custom Scale',
+        hint: `Customize the escalation increment variable. The formula is: scale = originalScale + customScale * elevation `,
+        scope: 'world',
+        config: true,
+        type: Number,
+        range: {
+            min: 0.001,
+            max: 0.02,
+            step: 0.005
+          },
+        default: 0.01,
+        restricted: true,
+        onChange: () => {
+            cacheSettings();
+        },
+    });
+
     game.settings.register(MODULE, 'enableZoom', {
         name: 'Auto Zoom',
         hint: `Change the zoom level based on the token scale, will only have effect if 'Scale Token Base On Elevation' is enabled.`,
@@ -103,7 +122,7 @@ export function registerSettings() {
     });
 
     game.settings.register(MODULE, 'optNoShadow', {
-        name: 'Enable Shadow remove',
+        name: 'Enable Shadow Remove',
         hint: `Flying Tokens auto remove the shadow drawing from the token, uncheck this option if you want to disable this behavior. This setting will only affect tokens flying after the change, to apply to a token already flying you must land and fly again.`,
         scope: 'world',
         config: true,
@@ -116,7 +135,7 @@ export function registerSettings() {
     });
 
     game.settings.register(MODULE, 'optWind', {
-        name: 'Enable wind effect',
+        name: 'Enable wind Effect',
         hint: `Uncheck this to remove the small twist effect from the center of the token while it is flying. This setting will only affect tokens flying after the change, to apply to a token already flying you must land and fly again.`,
         scope: 'world',
         config: true,
@@ -136,6 +155,7 @@ export function cacheSettings() {
     chatOutput = game.settings.get(MODULE, 'chatOutput');
     notificationOutput = game.settings.get(MODULE, 'notificationOutput');
     scaleFT = game.settings.get(MODULE, 'scaleFT');
+    customScale = game.settings.get(MODULE, 'customScale');
     enableZoom = game.settings.get(MODULE, 'enableZoom');
     optMovement = game.settings.get(MODULE, 'optMovement');
     optNoShadow = game.settings.get(MODULE, 'optNoShadow');

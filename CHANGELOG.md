@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.3.0]
+- New token scale formula, with adjustable pace.
+- Now the user can set a alternative image to replace when the token is flying.
+- Totally compatible with PF2E 4.2
+
 ## [1.2.1]
 - Added options to select which filter effects are applied when flying. 
 Hint: These settings will only affect tokens flying after the change, to apply to a token already flying you must land and fly again. 

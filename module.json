@@ -50,17 +50,17 @@
   "url": "This is auto replaced",
   "manifest": "This is auto replaced",
   "download": "This is auto replaced",
-  "license": "https://github.com/paulo-roger/flying-tokens/blob/master/LICENSE",
-  "readme": "https://github.com/paulo-roger/flying-tokens/blob/master/README.md",
-  "bugs": "https://github.com/paulo-roger/flying-tokens/issues",
+  "license": "https://github.com/LeafWulf/flying-tokens/blob/master/LICENSE",
+  "readme": "https://github.com/LeafWulf/flying-tokens/blob/master/README.md",
+  "bugs": "https://github.com/LeafWulf/flying-tokens/issues",
   "media": [
     {
       "type": "icon",
-      "url": "https://raw.githubusercontent.com/paulo-roger/flying-tokens/master/readme/icon.png"
+      "url": "https://raw.githubusercontent.com/LeafWulf/flying-tokens/master/readme/icon.png"
     },
     {
       "type": "cover",
-      "url": "https://raw.githubusercontent.com/paulo-roger/flying-tokens/master/readme/cover.png"
+      "url": "https://raw.githubusercontent.com/LeafWulf/flying-tokens/master/readme/cover.png"
     }
   ]
 }

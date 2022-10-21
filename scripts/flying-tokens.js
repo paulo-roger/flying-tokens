@@ -1,6 +1,6 @@
 import { MODULE, MODULE_DIR } from "./const.js"; //import the const variables
 import { chatMessage } from "./util.js"
-import { registerSettings, cacheSettings, enableFT, enableForAll, scaleFT, enableZoom, chatOutput, notificationOutput, optMovement, optNoShadow, optWind, customScale } from "./settings.js" //import settings
+import { registerSettings, cacheSettings, enableFT, enableForAll, enableZoom, chatOutput, notificationOutput, optMovement, optNoShadow, optWind, customScale } from "./settings.js" //import settings
 import { FlyingHud } from "./flying-hud.js"
 // import { movement, noShadow, wind, shadow, bounce } from "./filters.js"
 
@@ -24,12 +24,12 @@ Hooks.once('ready', async function () {
     pf2eAutoScaleCheck();
 });
 
-function pf2eAutoScaleCheck(token, perma = true) {
+function pf2eAutoScaleCheck(token, permanent = true) {
     let check;
-    if (system == 'pf2e' && scaleFT) {
+    if (system == 'pf2e' && customScale) {
         if (token) check = token.getFlag("pf2e", "linkToActorSize")
         else check = game.settings.get('pf2e', 'tokens.autoscale')
-        if (check) ui.notifications.warn('If you want Flying Tokens to autoscale you must disable PF2E setting "<b>Scale tokens according to size</b>" or individually disable this in the token config.', { permanent: perma })
+        if (check) ui.notifications.warn('If you want Flying Tokens to autoscale you must disable PF2E setting "<b>Scale tokens according to size</b>" or individually disable this in the token config.', { permanent })
     }
 }
 
@@ -101,7 +101,7 @@ Hooks.on("renderTokenConfig", (app, html, data) => {
                     current: altToken,
                     type: "imagevideo",
                     displayMode: "tiles",
-                    button: "file-picker",
+                    // button: "file-picker",
                     callback: async (path) => {
                         html.find(`input[name="flags.${MODULE}.altToken"]`).val(path);
                         // console.log(app.token)
@@ -172,7 +172,7 @@ async function tokenScale(token, elevation) {
 }
 
 async function flyZoom(token, elevation, minZoom = 3) {
-    if (scaleFT) {
+    if (customScale) {
         let scale = await tokenScale(token, elevation)
         if (enableZoom) {
             let x = token.x + game.scenes.viewed.data.size

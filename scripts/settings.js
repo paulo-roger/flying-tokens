@@ -4,7 +4,6 @@ export let enableFT = true;
 export let enableForAll = false;
 export let chatOutput = true;
 export let notificationOutput = false;
-export let scaleFT = true;
 export let enableZoom = false;
 export let optMovement = true;
 export let optNoShadow = true;
@@ -64,29 +63,16 @@ export function registerSettings() {
         },
     });
 
-    game.settings.register(MODULE, 'scaleFT', {
-        name: 'Scale Token Based On Elevation',
-        hint: `Change the token scale to be larger as it goes higher in elevation`,
-        scope: 'world',
-        config: true,
-        type: Boolean,
-        default: true,
-        restricted: true,
-        onChange: () => {
-            cacheSettings();
-        },
-    });
-
     game.settings.register(MODULE, 'customScale', {
         name: 'Custom Scale',
-        hint: `Customize the escalation increment variable. The formula is: scale = originalScale + customScale * elevation `,
+        hint: `Customize the escalation increment variable. The formula is: scale = originalScale + customScale * elevation. If you want to disable it set the value to 0.`,
         scope: 'world',
         config: true,
         type: Number,
         range: {
-            min: 0.001,
+            min: 0,
             max: 0.02,
-            step: 0.005
+            step: 0.001
           },
         default: 0.01,
         restricted: true,
@@ -122,7 +108,7 @@ export function registerSettings() {
     });
 
     game.settings.register(MODULE, 'optNoShadow', {
-        name: 'Enable Shadow Remove',
+        name: 'Enable Shadow Removal',
         hint: `Flying Tokens auto remove the shadow drawing from the token, uncheck this option if you want to disable this behavior. This setting will only affect tokens flying after the change, to apply to a token already flying you must land and fly again.`,
         scope: 'world',
         config: true,
@@ -154,7 +140,6 @@ export function cacheSettings() {
     enableForAll = game.settings.get(MODULE, 'enableForAll');
     chatOutput = game.settings.get(MODULE, 'chatOutput');
     notificationOutput = game.settings.get(MODULE, 'notificationOutput');
-    scaleFT = game.settings.get(MODULE, 'scaleFT');
     customScale = game.settings.get(MODULE, 'customScale');
     enableZoom = game.settings.get(MODULE, 'enableZoom');
     optMovement = game.settings.get(MODULE, 'optMovement');

@@ -29,7 +29,7 @@ function pf2eAutoScaleCheck(token, perma = true) {
     if (system == 'pf2e' && scaleFT) {
         if (token) check = token.getFlag("pf2e", "linkToActorSize")
         else check = game.settings.get('pf2e', 'tokens.autoscale')
-        if (check) ui.notifications.warn('If you want Flying Tokens to autoscale you must disable PF2E setting "<b>Scale tokens according to size</b>" or individually disable this in the token config.', {permanent:perma})
+        if (check) ui.notifications.warn('If you want Flying Tokens to autoscale you must disable PF2E setting "<b>Scale tokens according to size</b>" or individually disable this in the token config.', { permanent: perma })
     }
 }
 
@@ -51,8 +51,9 @@ Hooks.on('renderTokenHUD', (app, html, data) => {
 
 Hooks.on("renderTokenConfig", (app, html, data) => {
     if (isFlyer(app.token)) {
-        let altToken = app.token.getFlag(MODULE, "altToken") || "";
-        let newHtml = `<div class="form-group">
+        if (fvttVersion >= 10) {
+            let altToken = app.token.getFlag(MODULE, "altToken") || "";
+            let newHtml = `<div class="form-group">
                     <label>Flying Image Path</label>
                     <div class="form-fields">
                       <button type="button" class="file-picker" data-type="imagevideo" data-target="flags.${MODULE}.altToken" title="Browse Files" tabindex="-1">
@@ -61,24 +62,54 @@ Hooks.on("renderTokenConfig", (app, html, data) => {
                       <input class="image" type="text" name="flags.${MODULE}.altToken" placeholder="path/image.png" value="${altToken}">
                     </div>
                   </div>`
-        const tinthtml = html.find('input[name="texture.src"]');
-        const formGroup = tinthtml.closest(".form-group");
-        formGroup.after(newHtml);
-        // altToken = html.find('input[name="flags.flyingTokens.alt"]').value;
-        app.setPosition({ height: "auto" });
-        html.find(`button[data-target="flags.${MODULE}.altToken"]`).on('click', async () => {
-            new FilePicker({
-                current: altToken,
-                type: "imagevideo",
-                displayMode: "tiles",
-                button: "file-picker",
-                callback: async (path) => {
-                    html.find(`input[name="flags.${MODULE}.altToken"]`).val(path);
-                    // console.log(app.token)
-                    // await app.token.setFlag(MODULE, "altToken", path)
-                }
-            }).render()
-        });
+            const tinthtml = html.find('input[name="texture.src"]');
+            const formGroup = tinthtml.closest(".form-group");
+            formGroup.after(newHtml);
+            // altToken = html.find('input[name="flags.flyingTokens.alt"]').value;
+            app.setPosition({ height: "auto" });
+            html.find(`button[data-target="flags.${MODULE}.altToken"]`).on('click', async () => {
+                new FilePicker({
+                    current: altToken,
+                    type: "imagevideo",
+                    displayMode: "tiles",
+                    button: "file-picker",
+                    callback: async (path) => {
+                        html.find(`input[name="flags.${MODULE}.altToken"]`).val(path);
+                        // console.log(app.token)
+                        // await app.token.setFlag(MODULE, "altToken", path)
+                    }
+                }).render()
+            });
+        } else {
+            let altToken = app.token.getFlag(MODULE, "altToken") || "";
+            let newHtml = `<div class="form-group">
+                    <label>Flying Image Path</label>
+                    <div class="form-fields">
+                      <button type="button" class="file-picker" data-type="imagevideo" data-target="flags.${MODULE}.altToken" title="Browse Files" tabindex="-1">
+                        <i class="fas fa-file-import fa-fw"></i>
+                      </button>
+                      <input class="image" type="text" name="flags.${MODULE}.altToken" placeholder="path/image.png" value="${altToken}">
+                    </div>
+                  </div>`
+            const tinthtml = html.find('input[name="img"]');
+            const formGroup = tinthtml.closest(".form-group");
+            formGroup.after(newHtml);
+            // altToken = html.find('input[name="flags.flyingTokens.alt"]').value;
+            app.setPosition({ height: "auto" });
+            html.find(`button[data-target="flags.${MODULE}.altToken"]`).on('click', async () => {
+                new FilePicker({
+                    current: altToken,
+                    type: "imagevideo",
+                    displayMode: "tiles",
+                    button: "file-picker",
+                    callback: async (path) => {
+                        html.find(`input[name="flags.${MODULE}.altToken"]`).val(path);
+                        // console.log(app.token)
+                        // await app.token.setFlag(MODULE, "altToken", path)
+                    }
+                }).render()
+            });
+        }
     }
 });
 
@@ -103,7 +134,8 @@ export async function fly(token, elevation) {
     let isFlying = token.getFlag(MODULE, "flying")
     if (!isFlying) {
         await token.setFlag(MODULE, "scale", scale);
-        await token.setFlag(MODULE, "originalToken", token.texture.src);
+        if (fvttVersion < 10) await token.setFlag(MODULE, "originalToken", token.data.img);// compatible v9
+        else await token.setFlag(MODULE, "originalToken", token.texture.src);//compatible v10+
     }
     if (elevation == 0) {
         return land(token)
@@ -114,9 +146,11 @@ export async function fly(token, elevation) {
         await flyZoom(token, elevation)
         await flyingFX(token, elevation)
         if (notificationOutput)
-            ui.notifications.info(token.name + ' is flying at <b>' + elevation + ' feet</b> high.')
-        if (chatOutput)
-            await chatMessage(`<img src='${token.texture.src}' width='32' style='border:none'> ${token.name} is flying at <b>${elevation} feet</b> high.`)
+            ui.notifications.info(token.data.name + ' is flying at <b>' + elevation + ' feet</b> high.')
+        if (chatOutput) {
+            if (fvttVersion < 10) await chatMessage(`<img src='${token.data.img}' width='32' style='border:none'> ${token.data.name} is flying at <b>${elevation} feet</b> high.`)// compatible v9
+            else await chatMessage(`<img src='${token.texture.src}' width='32' style='border:none'> ${token.name} is flying at <b>${elevation} feet</b> high.`)//compatible v10+
+        }
     }
 }
 
@@ -129,9 +163,11 @@ async function tokenScale(token, elevation) {
     scale = Math.round((scale + Number.EPSILON) * 100) / 100 //rounding with 2 floats
     if (scale < 0.2) scale = 0.2
     else if (scale > 10) scale = 10
-    await token.update({ texture: { src: altToken } })
-    await new Promise(resolve => setTimeout(resolve, 800));//give time to the scale animation to play
-    await token.update({ texture: { scaleX: scale, scaleY: scale } })//this is in a different line so the animation plays AFTER the token is changed.
+    if (fvttVersion < 10) await token.update({ img: altToken })// compatible v9
+    else await token.update({ texture: { src: altToken } })//compatible v10+
+    if (fvttVersion >= 10)  await new Promise(resolve => setTimeout(resolve, 800));//give time to the scale animation to play
+    if (fvttVersion < 10) await token.update({ scale: scale })// compatible v9
+    else await token.update({ texture: { scaleX: scale, scaleY: scale } })//this is in a different line so the animation plays AFTER the token is changed. compatible v10+
     return scale
 }
 
@@ -263,13 +299,17 @@ export async function land(token) {
     await token.setFlag(MODULE, "flying", false);
     let originalToken = token.getFlag(MODULE, "originalToken");
     let scale = token.getFlag(MODULE, "scale");
-    await token.update({ texture: { scaleX: scale, scaleY: scale } })
+    if (fvttVersion < 10) await token.update({ scale: scale })// compatible v9
+    else await token.update({ texture: { scaleX: scale, scaleY: scale } })//compatible v10+
     await flyZoom(token, 0, 2.5);
-    await new Promise(resolve => setTimeout(resolve, 800));//give time to the scale animation to play
+    if (fvttVersion >= 10)  await new Promise(resolve => setTimeout(resolve, 800));//give time to the scale animation to play
     await flyingFX(token, 0);
-    await token.update({ texture: { src: originalToken } }) //this is in a different line so the animation plays BEFORE the token is changed.
+    if (fvttVersion < 10) await token.update({ img: originalToken })// compatible v9
+    else await token.update({ texture: { src: originalToken } }) //this is in a different line so the animation plays BEFORE the token is changed. compatible v10+
     if (notificationOutput)
-        ui.notifications.info(token.name + ' <b> has landed</b>.')
-    if (chatOutput)
-        await chatMessage(`<img src='${token.texture.src}' width='32' style='border:none'> ${token.name}  <b> has landed</b>.`)
+        ui.notifications.info(token.data.name + ' <b> has landed</b>.')
+    if (chatOutput) {
+        if (fvttVersion < 10) await chatMessage(`<img src='${token.data.img}' width='32' style='border:none'> ${token.data.name} <b> has landed</b>.`)// compatible v9
+        else await chatMessage(`<img src='${token.texture.src}' width='32' style='border:none'> ${token.name}  <b> has landed</b>.`)//compatible v10+
+    }
 }

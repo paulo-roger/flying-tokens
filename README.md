@@ -1,5 +1,5 @@
 [![Supported Foundry Versions](https://img.shields.io/endpoint?url=https://foundryshields.com/version?url=https://github.com/LeafWulf/flying-tokens/releases/latest/download/module.json)](https://foundryvtt.com/packages/flying-tokens) [![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fflying-tokens&colorB=0374b5)](https://forge-vtt.com/bazaar#sort=updated&package=flying-tokens)  
-[![Latest Downloads](https://img.shields.io/github/downloads/LeafWulf/flying-tokens/latest/module.zip?color=blue&label=latest%20downloads)](https://github.com/LeafWulf/flying-tokens/releases/latest) [![Total Downloads](https://img.shields.io/github/downloads/LeafWulf/flying-tokens/module.zip?color=blue&label=total%20downloads)](https://github.com/LeafWulf/flying-tokens/releases)  
+[![Latest Downloads](https://img.shields.io/github/downloads/paulo-roger/flying-tokens/latest/module.zip?color=blue&label=latest%20downloads)](https://github.com/LeafWulf/flying-tokens/releases/latest) [![Total Downloads](https://img.shields.io/github/downloads/paulo-roger/flying-tokens/module.zip?color=blue&label=total%20downloads)](https://github.com/LeafWulf/flying-tokens/releases)  
 [![Discord](https://dcbadge.vercel.app/api/shield/219289132235489280?style=flat)](https://discordapp.com/users/219289132235489280) [![Ko-fi](https://img.shields.io/badge/Ko--fi-winterwulf-0374b5?logo=kofi)](https://ko-fi.com/winterwulf)
 
 # Flying Tokens
@@ -60,7 +60,7 @@ So far none.
 If you have suggestions or want to report a problem, you can create an issue here: [Issues](../../issues)
 
 ## Changelog
-You can read the changelog here: [CHANGELOG.md](https://github.com/LeafWulf/flying-tokens/blob/master/CHANGELOG.md)
+You can read the changelog here: [CHANGELOG.md](https://github.com/paulo-roger/flying-tokens/blob/master/CHANGELOG.md)
 
 ## Special Thanks
 `Peterson`, `roi007leaf` and `Zhell`
